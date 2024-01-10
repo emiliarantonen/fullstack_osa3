@@ -60,28 +60,31 @@ let persons = [
   app.delete('/api/persons/:id', (req, res) => {
     const id = Number(req.params.id)
     persons = persons.filter(person => person.id !== id)
-  
     res.status(204).end()
   })
 
   app.post('/api/persons', (req, res)=>{
-    const person = req.body
-    person.id=getRandomInt(1000)
-    persons=persons.concat(person)
-    
-    if(!person.name){
+    const {id, name, number} = req.body
+    // person.id=getRandomInt(1000)
+    // persons=persons.concat(person)
+    if(!name){
         return res.status(400).json({error: 'name missing'});
-    }else if (!person.number){
+    }else if (!number){
         return res.status(400).json({error: 'number missing'});
-    }else if (persons.find(p=>p.name===person.name)){
+    }else if (persons.find(p=>p.name===name)){
         return res.status(400).json({error: 'name is already in the phonebook'});
-    } else (res.json(person))
+    } 
+
+    const newPerson = { id, name, number };
+    console.log(newPerson);
+
+    return res.json(newPerson)
     
   })
 
-  function getRandomInt(max) {
-    return Math.floor(Math.random() * max);
-  }
+//   function getRandomInt(max) {
+//     return Math.floor(Math.random() * max);
+//   }
   
   app.get('/info', (req, res) => {
     const date = new Date()

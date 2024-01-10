@@ -1,4 +1,4 @@
-# fly.toml app configuration file generated for fullstack3 on 2024-01-09T14:09:20+02:00
+# fly.toml app configuration file generated for fullstack3 on 2024-01-09T20:34:39+02:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
@@ -9,10 +9,10 @@ primary_region = "arn"
 [build]
 
 [env]
-  PORT = "3000"
+  PORT = "3001"
 
 [http_service]
-  internal_port = 3000
+  internal_port = 3001
   force_https = true
   auto_stop_machines = true
   auto_start_machines = true
