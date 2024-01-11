@@ -9,7 +9,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:ui": "rm -rf dist && cd /Users/emiliarantonen/fullstack/fullstacktehtavat/osa2/puhelinluettelo && npm run build && cp -r dist /Users/emiliarantonen/fullstack_osa3",
     "deploy": "fly deploy",
-    "deploy:full": "npm run build:ui && npm run deploy",    
+    "deploy:full": "npm run build:ui && npm run deploy",
     "logs:prod": "fly logs"
   },
   "author": "",
@@ -22,6 +22,8 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.18.2",
+    "mongodb": "^6.3.0",
+    "mongoose": "^8.0.4",
     "morgan": "^1.10.0"
   }
 }
