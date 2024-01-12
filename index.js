@@ -57,9 +57,7 @@ morgan.token('content', (request) =>
         return res.status(400).json({error: 'name missing'})
     }else if (body.number === undefined){
         return res.status(400).json({error: 'number missing'})
-    // }else if (persons.find(p=>p.name===name)){
-    //     return res.status(400).json({error: 'name is already in the phonebook'});
-    } 
+    }
 
     const person = new Person({
       name: body.name,
@@ -78,15 +76,13 @@ morgan.token('content', (request) =>
     })  
 
   app.put('/api/persons/:id', (request, response, next) => {
-    const body = request.body
-    
-    const person = {
-      name: body.name,
-      number: body.number
-    }
+    const {name, number} = request.body
 
     Person
-    .findByIdAndUpdate(request.params.id, person, { new: true })
+    .findByIdAndUpdate(
+      request.params.id, 
+      {name, number}, 
+      { new: true, runValidators: true, context: 'query' })
     .then(updatedPerson => {
       response.json(updatedPerson)
     })
@@ -112,6 +108,8 @@ morgan.token('content', (request) =>
   
     if (error.name === 'CastError') {
       return response.status(400).send({ error: 'malformatted id' })
+    } else if (error.name === 'ValidationError') {
+      return response.status(400).json({ error: error.message })
     }
   
     next(error)
