@@ -10,12 +10,14 @@
     "build:ui": "rm -rf dist && cd /Users/emiliarantonen/fullstack/fullstacktehtavat/osa2/puhelinluettelo && npm run build && cp -r dist /Users/emiliarantonen/fullstack_osa3",
     "deploy": "fly deploy",
     "deploy:full": "npm run build:ui && npm run deploy",
-    "logs:prod": "fly logs"
+    "logs:prod": "fly logs",
+    "lint": "eslint ."
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@flydotio/dockerfile": "^0.5.0",
+    "eslint": "^8.56.0",
     "json-server": "^0.17.4",
     "nodemon": "^3.0.2"
   },

@@ -10,14 +10,14 @@ const name = process.argv[3]
 const number = process.argv[4]
 
 const url =
-  `mongodb+srv://fullstack:fullstack123@cluster0.b8p5hpe.mongodb.net/persons?retryWrites=true&w=majority`
+  `mongodb+srv://fullstack:${password}@cluster0.b8p5hpe.mongodb.net/persons?retryWrites=true&w=majority`
 
 mongoose.set('strictQuery', false)
 mongoose.connect(url)
-.then(() => {
-  console.log('Connected to MongoDB');
+  .then(() => {
+    console.log('Connected to MongoDB')
   // Additional code to run after successful connection
-})
+  })
 
 const personSchema = new mongoose.Schema({
   name: String,
@@ -28,21 +28,21 @@ const personSchema = new mongoose.Schema({
 const Person = mongoose.model('Person', personSchema)
 
 if(process.argv[3]){
-const person = new Person({
-  name,
-  number,
-  important: true,
-})
+  const person = new Person({
+    name,
+    number,
+    important: true,
+  })
 
-person.save().then(result => {
+  person.save().then(() => {
     console.log(`Added ${person.name} numer ${person.number} to phonebook`)
-  mongoose.connection.close()
-})}
+    mongoose.connection.close()
+  })}
 
 Person.find({}).then(result => {
-    console.log("phonebook:")
-    result.forEach(person => {
-      console.log(`${person.name} ${person.number}`)
-    });
-    mongoose.connection.close()
+  console.log('phonebook:')
+  result.forEach(person => {
+    console.log(`${person.name} ${person.number}`)
   })
+  mongoose.connection.close()
+})
