@@ -1,10 +1,11 @@
+require('dotenv').config()
 const express = require('express')
 const app = express()
 const morgan = require('morgan')
 const cors = require('cors')
+const Person = require('./models/person')
 
 app.use(cors())
-
 app.use(express.json())
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :content'))
 app.use(express.static('dist'))
@@ -40,10 +41,10 @@ let persons = [
     }
 ]
 
-
-  
   app.get('/api/persons', (req, res) => {
-    res.json(persons)
+    Person.find({}).then(persons=>{
+      res.json(persons)
+    })
   })
 
   app.get('/api/persons/:id', (req, res) => {
@@ -58,40 +59,50 @@ let persons = [
   })
 
   app.delete('/api/persons/:id', (req, res) => {
-    const id = Number(req.params.id)
-    persons = persons.filter(person => person.id !== id)
-    res.status(204).end()
+    Person.findById(req.params.id).then(person => {
+      res.json(person)
+    })
   })
 
   app.post('/api/persons', (req, res)=>{
-    const {id, name, number} = req.body
-    // person.id=getRandomInt(1000)
-    // persons=persons.concat(person)
-    if(!name){
-        return res.status(400).json({error: 'name missing'});
-    }else if (!number){
-        return res.status(400).json({error: 'number missing'});
-    }else if (persons.find(p=>p.name===name)){
-        return res.status(400).json({error: 'name is already in the phonebook'});
+    const body = req.body
+    body.id=getRandomInt(1000)
+    if(body.name === undefined){
+        return res.status(400).json({error: 'name missing'})
+    }else if (body.number === undefined){
+        return res.status(400).json({error: 'number missing'})
+    // }else if (persons.find(p=>p.name===name)){
+    //     return res.status(400).json({error: 'name is already in the phonebook'});
     } 
 
-    const newPerson = { id, name, number };
-    console.log(newPerson);
+    const person = new Person({
+      name: body.name,
+      number: body.number
+    })
+    console.log(person)
 
-    return res.json(newPerson)
-    
+    person
+    .save()
+    .then((savedPerson) => {
+      res.json(savedPerson);
+      console.log('Person saved to the database:', savedPerson);
+    })
+    .catch((error) => {
+      console.error('Error saving person to the database:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    });   
   })
 
-//   function getRandomInt(max) {
-//     return Math.floor(Math.random() * max);
-//   }
+  function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+  }
   
   app.get('/info', (req, res) => {
     const date = new Date()
     res.send(`<p>Phone book has info for ${persons.length} people</p><p>${date}</p>`)
   })
 
-  const PORT = process.env.PORT || 3001
+  const PORT = process.env.PORT
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
   })

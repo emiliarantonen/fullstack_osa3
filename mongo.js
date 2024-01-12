@@ -10,10 +10,14 @@ const name = process.argv[3]
 const number = process.argv[4]
 
 const url =
-  `mongodb+srv://fullstack:${password}@cluster0.b8p5hpe.mongodb.net/persons?retryWrites=true&w=majority`
+  `mongodb+srv://fullstack:fullstack123@cluster0.b8p5hpe.mongodb.net/persons?retryWrites=true&w=majority`
 
 mongoose.set('strictQuery', false)
 mongoose.connect(url)
+.then(() => {
+  console.log('Connected to MongoDB');
+  // Additional code to run after successful connection
+})
 
 const personSchema = new mongoose.Schema({
   name: String,
@@ -42,4 +46,3 @@ Person.find({}).then(result => {
     });
     mongoose.connection.close()
   })
-
